@@ -46,11 +46,14 @@ class Directory extends React.Component {
         }
     }
     render() {
+        //de-structuring
+        const { sections } = this.state;
+
         return (
             <div className="directory-menu">
                 {
                     //  imageUrl, id, size, linkUrl instead of this ...{anyName}
-                    this.state.sections.map(({ id, ...otherSectionProps }) => (
+                    sections.map(({ id, ...otherSectionProps }) => (
                         <MenuItem key={id} {...otherSectionProps} />
 
                         //history={this.props.history} Prop Drilling to pass the props to children..
