@@ -1,8 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ReactComponent as Logo } from '../../assets/crown.svg'
 import './header.styles.scss';
+
+import { Link } from 'react-router-dom';
+
+import { ReactComponent as Logo } from '../../assets/crown.svg'
+
 import { auth } from '../../firebase/firebase.utils';
+
+import { connect } from 'react-redux';
 
 const Header = ({ currentUser }) => (
     <div className="header">
@@ -30,8 +35,11 @@ const Header = ({ currentUser }) => (
         </div>
     </div>
 )
+const mapStateToProps = (state) => ({
+    currentUser: state.user.currentUser
+})
 
-export default Header;
+export default connect(mapStateToProps)(Header);
 
 // import React from 'react';
 // import { Link } from 'react-router-dom';
@@ -59,7 +67,7 @@ export default Header;
 //                             auth.signOut()
 //                         }}
 //                     > 
-                    
+
 //                     {`SIGN OUT ${currentUser.displayName.split(' ')[0].toUpperCase()}`} </div>)
 //                     :
 //                     (<Link className="option" to="/signin">SIGN IN</Link>)
