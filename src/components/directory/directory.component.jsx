@@ -8,8 +8,7 @@ import MenuItem from '../menu-item/menu-item.component'
 
 import './directory.styles.scss'
 
-//Converted Class Component to Functional Component
-
+//Converted Class Component to Functional Component and included Redux
 const Directory = ({ sections }) => (
     <div className="directory-menu">
         {
