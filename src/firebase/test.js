@@ -13,3 +13,6 @@ firestore.collection('/users/yG5qE2hV7AzBTrZztMP9/cart-item');
 // npm install --save react-redux
 // npm install --save redux
 // npm i --save redux-logger
+
+{Redux_Persist}
+///npm install redux-persist
