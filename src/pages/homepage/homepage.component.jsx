@@ -1,15 +1,17 @@
 import React from 'react'
-import './homepage.styles.scss'
+
+// import './homepage.styles.scss' //SCSS STYLES CHANGED TO COMPONENT
+import { HomePageContainer } from './homepage.styles';
 
 import Directory from '../../components/directory/directory.component'
 
 const HomePage = () => (
-    <div className="homepage">
-        <Directory />
+    <HomePageContainer>
+        < Directory />
         {/* <Directory history={history} /> 
         Prop Drilling to avoid instead use withRouter - A higher Order Component
         */}
-    </div>
+    </HomePageContainer >
 );
 
 export default HomePage;

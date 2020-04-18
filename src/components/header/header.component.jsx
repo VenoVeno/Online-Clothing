@@ -1,48 +1,50 @@
 import React from 'react';
-import './header.styles.scss';
+import { ReactComponent as Logo } from '../../assets/crown.svg'
+
+// import './header.styles.scss'; //SCSS STYLES CHANGED TO COMPONENT
+import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink } from './header.styles'
 
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import { ReactComponent as Logo } from '../../assets/crown.svg'
+//IMPORTED IN HEADER STYLES JSX
+//import { Link } from 'react-router-dom';
 
 import { auth } from '../../firebase/firebase.utils';
-
-import { connect } from 'react-redux';
 
 import { createStructuredSelector } from 'reselect';
 import { selectCartHidden } from '../../redux/cart/cart.selectors';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 
 const Header = ({ currentUser, hidden }) => (
-    <div className="header">
-        <Link className="logo-container" to="/" >
+    <HeaderContainer>
+        <LogoContainer to="/" >
             <Logo className="logo" />
-        </Link>
-        <div className="options">
-            <Link className="option" to="/shop">
+        </LogoContainer>
+        <OptionsContainer>
+            <OptionLink to="/shop">
                 SHOP
-            </Link>
-            <Link className="option" to="/checkout">
+            </OptionLink>
+            <OptionLink to="/checkout">
                 <strike>CONTACT</strike>   CHECKOUT
-            </Link>
+            </OptionLink>
             {
                 currentUser ?
-                    (<div
-                        className="option"
+                    //TO PASS IN COMPONENT WE CAN GIVE as={COMPONENT NAME}
+                    (<OptionLink as='div'
                         onClick={() => {
                             auth.signOut()
                         }}
-                    >SIGN OUT</div>)
+                    >SIGN OUT</OptionLink>)
                     :
-                    (<Link className="option" to="/signin">SIGN IN</Link>)
+                    (<OptionLink to="/signin">SIGN IN</OptionLink>)
                 //{`SIGN OUT ${currentUser.displayName.split(' ')[0].toUpperCase()}`} </div>)
 
             }
             <CartIcon />
-        </div>
+        </OptionsContainer>
         {
             hidden
                 ?
@@ -50,7 +52,7 @@ const Header = ({ currentUser, hidden }) => (
                 :
                 <CartDropdown />
         }
-    </div>
+    </HeaderContainer>
 )
 // const mapStateToProps = (state) => ({
 //     currentUser: state.user.currentUser
