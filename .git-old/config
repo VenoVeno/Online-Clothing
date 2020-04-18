@@ -1,0 +1,14 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "New_Remote"]
+	url = https://github.com/VenoVeno/Online-Clothing.git
+	fetch = +refs/heads/*:refs/remotes/New_Remote/*
+[remote "origin"]
+	url = https://github.com/VenoVeno/Online-Clothing.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[remote "heroku"]
+	url = https://git.heroku.com/apparel-clothing.git
+	fetch = +refs/heads/*:refs/remotes/heroku/*

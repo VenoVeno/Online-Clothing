@@ -5,22 +5,23 @@ import { selectCollection } from '../../redux/shop/shop.selectors';
 
 import CollectionItem from '../../components/collection-item/collection-item.component';
 
-import './collection.styles.scss';
+// import './collection.styles.scss'; //SCSS STYLES CHANGED TO COMPONENT
+import { CollectionPageContainer, CollectionPageTitle, CollectionPageItemsContainer } from './collection.styles'
 
 const CollectionPage = ({ collection }) => {
     const { title, items } = collection;
     return (
-        <div className='collection-page'>
-            <h2 className='title'>{title.toUpperCase()}</h2>
-            <div className="items">
+        <CollectionPageContainer>
+            <CollectionPageTitle>{title}</CollectionPageTitle>
+            <CollectionPageItemsContainer>
                 {
                     items.map(
                         (item) =>
                             (<CollectionItem key={item.id} item={item} />)
                     )
                 }
-            </div>
-        </div>
+            </CollectionPageItemsContainer>
+        </CollectionPageContainer>
     )
 }
 

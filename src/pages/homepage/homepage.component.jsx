@@ -7,7 +7,7 @@ import Directory from '../../components/directory/directory.component'
 
 const HomePage = () => (
     <HomePageContainer>
-        < Directory />
+        <Directory />
         {/* <Directory history={history} /> 
         Prop Drilling to avoid instead use withRouter - A higher Order Component
         */}

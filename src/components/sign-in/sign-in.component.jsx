@@ -1,11 +1,12 @@
 import React from 'react';
 
-import './sign-in.styles.scss'
-
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 
 import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
+
+// import './sign-in.styles.scss'; //SCSS STYLES CHANGED TO COMPONENT
+import { SignInContainer, SignInTitle, SignInButtonGroup } from './sign-in.styles';
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -42,15 +43,14 @@ class SignIn extends React.Component {
 
     render() {
         return (
-            <div className="sign-in">
-                <h2 className="sign-in-header title">I already have an account</h2>
-                <span className="sign-in-sub-header">Sign in with Your email and password</span>
+            <SignInContainer>
+                <SignInTitle className="sign-in-header title">I already have an account</SignInTitle>
+                <span>Sign in with Your email and password</span>
 
-                <form className="sign-in-form" onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmit}>
                     <FormInput
                         type='email'
                         name='email'
-                        id='email'
                         label='Email'
                         handleChange={this.handleChange}
                         value={this.state.email}
@@ -60,7 +60,6 @@ class SignIn extends React.Component {
                     <FormInput
                         type='password'
                         name='password'
-                        id='password'
                         label='Password'
                         handleChange={this.handleChange}
                         value={this.state.password}
@@ -69,13 +68,13 @@ class SignIn extends React.Component {
 
                     {/* <CustomButton type="submit" child="Submit Form" />
                     or Pass this as Children to CustomButton Component */}
-                    <div className="sign-in-button-group">
+                    <SignInButtonGroup>
                         <CustomButton type="submit">Sign In</CustomButton>
                         <CustomButton onClick={signInWithGoogle} isGoogleSignIn>Sign In With Google</CustomButton>
-                    </div>
+                    </SignInButtonGroup>
 
                 </form>
-            </div>
+            </SignInContainer>
         )
     }
 }
