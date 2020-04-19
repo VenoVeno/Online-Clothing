@@ -18,23 +18,10 @@ import { setCurrentUser } from "./redux/user/user.actions";
 import { selectCurrentUser } from './redux/user/user.selectors';
 
 class App extends React.Component {
-  // constructor(props) {
-  //   super(props);
-
-  //   this.state = {
-  //     currentUser: null
-  //   }
-  // }
 
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    // this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
-    // this.setState({
-    //   currentUser: userAuth
-    // });
-    // // console.log(user);
-    // createUserProfileDocument(userAuth);
 
     const { setCurrentUser } = this.props;
 
@@ -43,23 +30,14 @@ class App extends React.Component {
 
         const userRef = await createUserProfileDocument(userAuth);
         userRef.onSnapshot(snapShot => {
-          // console.log("SnapShot from App js to set the state of app got from firebase db ",snapShot.data());
-
           setCurrentUser({
-            id: snapShot.id,
-            ...snapShot.data()
+            id: snapShot.id, ...snapShot.data()
           })
-          // },
-          // () => {
-          //   console.log("Current State => ", this.state)
-          // })
         })
       } else {
-        // this.setState({ currentUser: userAuth })
         setCurrentUser(userAuth)
       }
     })
-    // })
   }
 
   componentWillUnmount() {
@@ -78,10 +56,8 @@ class App extends React.Component {
             // component={SignInAndSignUpPage} 
             render={() =>
               this.props.currentUser
-                ?
-                (<Redirect to='/' />)
-                :
-                (<SignInAndSignUpPage />)
+                ? (<Redirect to='/' />)
+                : (<SignInAndSignUpPage />)
             }
           />
         </Switch>

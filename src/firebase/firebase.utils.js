@@ -15,12 +15,20 @@ const config = {
     appId: "1:682852590849:web:f15f5f5bb38735aea96700",
     measurementId: "G-YPG4B57THX"
 };
+firebase.initializeApp(config);
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
     if (!userAuth) return;
 
+    //DOCUMENT
     const userRef = firestore.doc(`users/${userAuth.uid}`);
     const snapShot = await userRef.get();
+
+    //COLLECTION REFERENCE AND SNAPSHOT
+    // const UserRefCollection = firestore.collection('users');
+    // const snapShotCollection = await UserRefCollection.get();
+    // console.log({ collection: snapShotCollection.docs.map(doc => doc.data()) });
+
     // console.log("SnapShot from firebase utils to check if user already available", snapShot);
 
     if (!snapShot.exists) {
@@ -48,7 +56,23 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     // console.log(firestore.doc('users/128fdashadu'));
 }
 
-firebase.initializeApp(config);
+//TO SET IF THE DOC_REF IS TO BE THE TITLE - PASS VALUE
+//AND TO BE ANY RANDOM - NO ARGS SHOULD BE PASSED collectionref.doc();
+
+// const newDocRef = collectionRef.doc(obj.title);
+// console.log(newDocRef.path,newDocRef.id);
+
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+    const collectionRef = firestore.collection(collectionKey);
+    console.log("HEY THIS IS COLLECTION REF TO INSERT DATA INTO DB", collectionRef);
+
+    const batch = firestore.batch();
+    objectsToAdd.forEach(obj => {
+        const newDocRef = collectionRef.doc();
+        batch.set(newDocRef, obj);
+    })
+    return await batch.commit();
+};
 
 //Firebase Auth
 export const auth = firebase.auth();
