@@ -11,14 +11,20 @@ export const selectCollections = createSelector(
 //UPDATED COLLECTION SELECTION PREVIEW AFTER CONVERTING ARRAY TO OBJECT-- SHOPDATA.
 export const selectCollectionsForPreview = createSelector(
     [selectCollections],
-    (collections) => Object.keys(collections).map(key => collections[key])
+    (collections) =>
+        (collections
+            ? Object.keys(collections).map(key => collections[key])
+            : [])
 )
 
 //DATA NORMALIZATION TECHNIQUE CONVERTING ID MATCH TO OBJECT MATCH
 export const selectCollection = (collectionUrlParam) =>
     createSelector(
         [selectCollections],
-        (collections) => collections[collectionUrlParam]
+        (collections) =>
+            (collections
+                ? collections[collectionUrlParam]
+                : null)
     )
 
 //const COLLECTION_MAP_ID = {hats: 1,sneakers: 2,jackets: 3,womens: 4,mens: 5}

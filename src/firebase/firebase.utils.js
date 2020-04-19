@@ -74,6 +74,42 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
     return await batch.commit();
 };
 
+export const convertCollectionSnapshotToMaplimited = (snapshot) => {
+    const transformedCollection = snapshot.docs.map(doc => {
+        const { title, items } = doc.data();
+        return {
+            id: doc.id,
+            title,
+            routeName: encodeURI(title.toLowerCase()),
+            items
+        }
+    })
+    // console.log(transformedCollection)
+
+    return transformedCollection.reduce((accumulator, collection) => {
+        accumulator[collection.title.toLowerCase()] = collection;
+        return accumulator;
+    }, {})
+}
+
+export const convertCollectionSnapshotToMap = (snapshot) => {
+    const transformedCollection = snapshot.docs.map(doc => {
+        const { title, routeName, items } = doc.data();
+        return {
+            id: doc.id,
+            title,
+            routeName: encodeURI(routeName.toLowerCase()),
+            items
+        }
+    })
+    // console.log(transformedCollection)
+
+    return transformedCollection.reduce((accumulator, collection) => {
+        accumulator[collection.title.toLowerCase()] = collection;
+        return accumulator;
+    }, {})
+}
+
 //Firebase Auth
 export const auth = firebase.auth();
 
