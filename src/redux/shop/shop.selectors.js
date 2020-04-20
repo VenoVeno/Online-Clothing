@@ -32,3 +32,8 @@ export const selectCollection = (collectionUrlParam) =>
 //      (collections) => collections.find(
 //             collection => collection.id === COLLECTION_MAP_ID[collectionUrlParam]
 //  )
+
+export const selectIsCollectionFetching = createSelector(
+    [selectShop],
+    (shop) => shop.isFetching
+)

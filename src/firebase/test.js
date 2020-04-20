@@ -17,6 +17,8 @@ firestore.collection('/users/yG5qE2hV7AzBTrZztMP9/cart-item');
 { Redux_Persist }
 // npm install redux-persist
 
+{ Redux_thunk }
+// npm install redux-thunk
 
 { STYLED_COMPONENTS }
 // npm install styled-components
