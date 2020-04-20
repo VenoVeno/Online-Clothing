@@ -26,12 +26,28 @@ class ShopPage extends React.Component {
     componentDidMount() {
         const { updateCollections } = this.props;
 
-        const collectionRef = firestore.collection('collections');
+        const collectionRef = firestore.collection("collections").orderBy("title", "asc");
+
+        //Firebase Observable/Observer pattern - Observable styles of Object
         this.unsubscribefromSnapshot = collectionRef.onSnapshot(async snapshot => {
             const collectionMap = convertCollectionSnapshotToMap(snapshot)
             updateCollections(collectionMap);
             this.setState({ loading: false })
         })
+
+        //Using .get Makes a API Call and .then Return Promise - API Call
+        // this.unsubscribefromSnapshot = collectionRef.get().then(
+        //     snapshot => {
+        //         const collectionMap = convertCollectionSnapshotToMap(snapshot)
+        //         updateCollections(collectionMap);
+        //         this.setState({ loading: false })
+        //     }
+        // )
+
+        //Using Native Fetch - API - DB:Firebase - API - A large depth to get Value from firebase
+        // fetch('https://firestore.googleapis.com/v1/projects/crwn-db/databases/(default)/documents/collections')
+        //     .then(response => response.json())
+        //     .then(collections => console.log(collections))
     }
 
     componentWillUnmount() {
