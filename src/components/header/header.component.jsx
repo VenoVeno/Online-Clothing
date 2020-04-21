@@ -5,7 +5,8 @@ import { ReactComponent as Logo } from '../../assets/crown.svg'
 import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink } from './header.styles'
 
 import CartIcon from '../cart-icon/cart-icon.component';
-import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+// import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+import CartDropdownContainer from '../cart-dropdown/cart-dropdown.container';
 
 import { connect } from 'react-redux';
 
@@ -50,7 +51,7 @@ const Header = ({ currentUser, hidden }) => (
                 ?
                 null
                 :
-                <CartDropdown />
+                <CartDropdownContainer />
         }
     </HeaderContainer>
 )

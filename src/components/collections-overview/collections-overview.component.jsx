@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { connect } from 'react-redux';
-
+// import { connect } from 'react-redux';
 // import { createStructuredSelector } from 'reselect';
 // import { selectCollectionsForPreview } from '../../redux/shop/shop.selectors';
 
@@ -25,4 +24,4 @@ const CollectionsOverview = ({ collections }) => (
 //     collections: selectCollectionsForPreview
 // })
 
-export default connect()(CollectionsOverview);
+export default CollectionsOverview;
