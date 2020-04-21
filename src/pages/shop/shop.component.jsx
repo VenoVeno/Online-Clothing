@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 
 // import { createStructuredSelector } from 'reselect';
 // import { selectIsCollectionFetching, selectIsCollectionsLoaded } from '../../redux/shop/shop.selectors';
-import { fetchCollectionsStartAsync } from '../../redux/shop/shop.actions';
+// import { fetchCollectionsStartAsync } from '../../redux/shop/shop.actions';
+import { fetchCollectionsStart } from '../../redux/shop/shop.actions';
 
 // import CollectionsOverview from '../../components/collections-overview/collections-overview.component';
 // import CollectionPage from '../collection/collection.component';
@@ -24,8 +25,8 @@ class ShopPage extends React.Component {
 
     Unsafe
     componentDidMount() {
-        const { fetchCollectionsStartAsync } = this.props;
-        fetchCollectionsStartAsync();
+        const { fetchCollectionsStart } = this.props;
+        fetchCollectionsStart();
 
         //const { updateCollections } = this.props;
 
@@ -77,7 +78,7 @@ class ShopPage extends React.Component {
 const mapDispatchToProps = (dispatch) => ({
     // updateCollections: (collectionMap) =>
     //     dispatch(updateCollections(collectionMap))
-    fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync())
+    fetchCollectionsStart: () => dispatch(fetchCollectionsStart())
 })
 
 export default connect(null, mapDispatchToProps)(ShopPage);
