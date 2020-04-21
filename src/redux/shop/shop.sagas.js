@@ -2,7 +2,7 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import { ShopActionTypes } from './shop.types';
 
 import { firestore, convertCollectionSnapshotToMap } from '../../firebase/firebase.utils';
-import { fetchCollectionsSuccess, fetchCollectionsFailure } from './shop.actions'
+import { fetchCollectionsSuccess, fetchCollectionsFailure } from './shop.actions';
 
 export function* fetchCollectionsAsync() {
     try {
