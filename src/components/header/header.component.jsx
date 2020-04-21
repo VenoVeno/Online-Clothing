@@ -13,13 +13,15 @@ import { connect } from 'react-redux';
 //IMPORTED IN HEADER STYLES JSX
 //import { Link } from 'react-router-dom';
 
-import { auth } from '../../firebase/firebase.utils';
+// import { auth } from '../../firebase/firebase.utils';
 
 import { createStructuredSelector } from 'reselect';
 import { selectCartHidden } from '../../redux/cart/cart.selectors';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 
-const Header = ({ currentUser, hidden }) => (
+import { signOutStart } from '../../redux/user/user.actions';
+
+const Header = ({ currentUser, hidden, signOutStart }) => (
     <HeaderContainer>
         <LogoContainer to="/" >
             <Logo className="logo" />
@@ -32,13 +34,9 @@ const Header = ({ currentUser, hidden }) => (
                 <strike>CONTACT</strike>   CHECKOUT
             </OptionLink>
             {
+                //TO PASS IN COMPONENT WE CAN GIVE as={COMPONENT NAME} onClick={() => {auth.signOut()}}
                 currentUser ?
-                    //TO PASS IN COMPONENT WE CAN GIVE as={COMPONENT NAME}
-                    (<OptionLink as='div'
-                        onClick={() => {
-                            auth.signOut()
-                        }}
-                    >SIGN OUT</OptionLink>)
+                    (<OptionLink as='div' onClick={signOutStart}>SIGN OUT</OptionLink>)
                     :
                     (<OptionLink to="/signin">SIGN IN</OptionLink>)
                 //{`SIGN OUT ${currentUser.displayName.split(' ')[0].toUpperCase()}`} </div>)
@@ -67,6 +65,10 @@ const Header = ({ currentUser, hidden }) => (
 const mapStateToProps = createStructuredSelector({
     currentUser: selectCurrentUser,
     hidden: selectCartHidden
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    signOutStart: () => dispatch(signOutStart())
 })
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
