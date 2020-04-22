@@ -1,4 +1,4 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, call, all, put } from 'redux-saga/effects';
 import { ShopActionTypes } from './shop.types';
 
 import { firestore, convertCollectionSnapshotToMap } from '../../firebase/firebase.utils';
@@ -23,4 +23,10 @@ export function* fetchCollectionsStart() {
     //     yield console.log("Am Called Here!")
     //     delay(5000);
     // } //Blocks the execution for next 5000 sec then logs the log..If delay is not included logs for each start
+}
+
+export default function* shopSagas() {
+    yield all([
+        call(fetchCollectionsStart)
+    ])
 }

@@ -9,6 +9,7 @@ export const checkUserSession = () => ({
     type: UserActionTypes.CHECK_USER_SESSION
 })
 
+//SIGNING IN
 export const googleSignInStart = () => ({
     type: UserActionTypes.GOOGLE_SIGN_IN_START
 });
@@ -28,6 +29,23 @@ export const signInFailure = (error) => ({
     payload: error
 });
 
+//SIGNING UP
+export const signUpStart = (UserCrendentials) => ({
+    type: UserActionTypes.SIGN_UP_START,
+    payload: UserCrendentials
+});
+
+export const signUpSuccess = ({ user, additonalData }) => ({
+    type: UserActionTypes.SIGN_UP_SUCCESS,
+    payload: { user, additonalData }
+});
+
+export const signUpFailure = (error) => ({
+    type: UserActionTypes.SIGN_UP_FAILURE,
+    payload: error
+});
+
+//SIGNING OUT
 export const signOutStart = () => ({
     type: UserActionTypes.SIGN_OUT_START
 });
