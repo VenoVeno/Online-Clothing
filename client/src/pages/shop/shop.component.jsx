@@ -13,7 +13,6 @@ import { fetchCollectionsStart } from '../../redux/shop/shop.actions';
 
 import CollectionsOverviewContainer from '../../components/collections-overview/collections-overview.container';
 import CollectionContainer from '../collection/collection.container';
-import { firestore } from '../../firebase/firebase.utils';
 
 // import { firestore, convertCollectionSnapshotToMap } from '../../firebase/firebase.utils';
 // import { convertCollectionSnapshotToMaplimited } from '../../firebase/firebase.utils'; limited

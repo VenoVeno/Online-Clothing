@@ -27,7 +27,7 @@ const CheckoutPage = ({ cartItems, total }) => (
             )
         }
 
-        <CheckoutTotalContainer><span>TOTAL : ${total} </span></CheckoutTotalContainer>
+        <CheckoutTotalContainer><span>TOTAL : ₹{total} </span></CheckoutTotalContainer>
         <TestCardContainer>
             *Please Use the Test-Credit-Card for Payments
             <br />
