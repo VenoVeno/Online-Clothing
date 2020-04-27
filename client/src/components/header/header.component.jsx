@@ -31,7 +31,7 @@ const Header = ({ currentUser, hidden, signOutStart }) => (
                 SHOP
             </OptionLink>
             <OptionLink to="/checkout">
-                <strike>CONTACT</strike>   CHECKOUT
+                CONTACT
             </OptionLink>
             {
                 //TO PASS IN COMPONENT WE CAN GIVE as={COMPONENT NAME} onClick={() => {auth.signOut()}}

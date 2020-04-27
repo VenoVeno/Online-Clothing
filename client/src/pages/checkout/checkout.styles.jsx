@@ -11,6 +11,10 @@ export const CheckoutPageContainer = styled.div`
     button{
         margin-left: auto;
     }
+
+    @media screen and (max-width: 800px) {
+        width: 90%;
+    }
 `;
 
 export const CheckoutHeaderContainer = styled.div`
@@ -28,12 +32,29 @@ export const CheckoutHeaderBlockContainer = styled.div`
     &:last-child {
         width: 8%;
     }
+
+
+    @media screen and (max-width: 800px) {
+        width: 22%;
+
+        &:first-child {
+            width: 17%;
+        }
+
+        &:last-child {
+            width: 12%;
+        }
+    }
 `;
 
 export const CheckoutTotalContainer = styled.div`
     margin-top: 30px;
     margin-left: auto;
     font-size: 36px;
+
+    @media screen and (max-width: 800px) {
+        font-size: 28px;
+    }
 `;
 
 export const TestCardContainer = styled.div`
@@ -41,4 +62,8 @@ export const TestCardContainer = styled.div`
     margin: 40px auto;
     font-size: 20px;
     color: red;
+
+    @media screen and (max-width: 800px) {
+        font-size: 18px;
+    }
 `;

@@ -20,7 +20,7 @@ import { googleSignInStart, emailSignInStart } from '../../redux/user/user.actio
 
 const SignIn = ({ googleSignInStart, emailSignInStart }) => {
 
-    const [userCredentials, setUserCredentials] = useState({ email: 'test@gmail.com', password: 'TestTest' });
+    const [userCredentials, setUserCredentials] = useState({ email: '', password: '' });
     const { email, password } = userCredentials;
 
     const handleSubmit = async (event) => {
