@@ -6,7 +6,7 @@ import React from 'react';
 
 import CartItem from '../cart-item/cart-item.component';
 
-//IMPORTED IN CART-DROPDOWN STYLES JSX
+// IMPORTED IN CART-DROPDOWN STYLES JSX
 // import CustomButton from "../custom-button/custom-button.component";
 
 // import './cart-dropdown.styles.scss'; //SCSS STYLES CHANGED TO COMPONENT
