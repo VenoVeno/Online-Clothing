@@ -34,7 +34,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     if (!snapShot.exists) {
 
         const { displayName, email } = userAuth;
-        console.log("Testing to Print UserAuth", userAuth);
+        // console.log("Testing to Print UserAuth", userAuth);
 
         const createdAt = new Date();
 
@@ -50,7 +50,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
             console.error('Error Creating User', error.message)
         }
     } else {
-        console.log("User Already Avaialable - Testing")
+        // console.log("User Already Avaialable - Testing")
     }
     return userRef;
     // console.log(firestore.doc('users/128fdashadu'));
