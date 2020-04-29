@@ -40,7 +40,7 @@ export const OptionsContainer = styled.div`
     justify-content: flex-end;
 
     @media screen and (max-width:800px){
-        width: 80%;
+        width: auto;
     }
 `;
 

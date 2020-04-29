@@ -10,7 +10,9 @@ import { GlobalStyleContainer } from './global.styles';
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-import CheckoutPage from './pages/checkout/checkout.component';
+
+// import CheckoutPage from './pages/checkout/checkout.component';
+import CheckoutContainer from './pages/checkout/checkout.container';
 
 import Header from './components/header/header.component'
 
@@ -59,7 +61,7 @@ const App = ({ checkUserSession, currentUser }) => {
       <Switch>
         <Route exact path='/' component={HomePage} />
         <Route path='/shop' component={ShopPage} />
-        <Route exact path='/checkout' component={CheckoutPage} />
+        <Route exact path='/checkout' component={CheckoutContainer} />
         <Route exact path='/signin'
           // component={SignInAndSignUpPage} 
           render={() =>

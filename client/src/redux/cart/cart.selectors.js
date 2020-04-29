@@ -27,3 +27,8 @@ export const selectCartTotal = createSelector(
             accumulatedTotal + cartItems.quantity * cartItems.price
         , 0)
 );
+
+export const selectIsCartFetching = createSelector(
+    [selectCart],
+    (cart) => cart.isCartFetching
+);

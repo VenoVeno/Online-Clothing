@@ -3,7 +3,9 @@ import { addItemToCart, removeItemsFromCart } from './cart.utils';
 
 const INITIAL_STATE = {
     hidden: true,
-    cartItems: []
+    cartItems: [],
+    isCartFetching: false,
+    cartFetchErrorMessage: undefined
 }
 
 const cartReducer = (state = INITIAL_STATE, action) => {
@@ -34,6 +36,24 @@ const cartReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 cartItems: []
+            }
+        case CartActionTypes.FETCH_CART_START:
+            return {
+                ...state,
+                isCartFetching: true
+            }
+        case CartActionTypes.FETCH_CART_SUCCESS:
+            return {
+                ...state,
+                isCartFetching: false,
+                cartItems: action.payload,
+                cartFetchErrorMessage: null
+            }
+        case CartActionTypes.FETCH_CART_FAILURE:
+            return {
+                ...state,
+                isCartFetching: false,
+                cartFetchErrorMessage: action.payload
             }
         default:
             return state;

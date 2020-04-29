@@ -57,7 +57,7 @@ export const CheckoutTotalContainer = styled.div`
     }
 `;
 
-export const TestCardContainer = styled.div`
+export const WarningContainer = styled.div`
     text-align: center;
     margin: 40px auto;
     font-size: 20px;

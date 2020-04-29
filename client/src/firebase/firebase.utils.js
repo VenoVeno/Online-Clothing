@@ -92,8 +92,8 @@ export const convertCollectionSnapshotToMaplimited = (snapshot) => {
     }, {})
 }
 
-export const convertCollectionSnapshotToMap = (snapshot) => {
-    const transformedCollection = snapshot.docs.map(doc => {
+export const convertCollectionSnapshotToMap = (snapShot) => {
+    const transformedCollection = snapShot.docs.map(doc => {
         const { title, routeName, items } = doc.data();
         return {
             id: doc.id,
@@ -117,6 +117,62 @@ export const getCurrentUser = () => {
             resolve(userAuth);
         }, reject)
     })
+}
+//FIRESTORE CART ITEM UPDATION - ADD OR REMOVE
+export const cartItemUpdateDocument = async (userAuth, cartItem) => {
+    if (!userAuth) return;
+    const collectionRef = firestore.collection(`users/${userAuth.uid}/cart`);
+
+    const batch = firestore.batch();
+    cartItem.forEach(obj => {
+        const { name } = obj;
+        const newDocRef = collectionRef.doc(name);
+        batch.set(newDocRef, obj);
+    });
+    return await batch.commit();
+}
+
+//FIRESTORE CART ITEM DELETION - DELETE SPECIFIC CART ITEM
+export const cartItemDeleteDocument = async (userAuth, itemToRemove) => {
+    if (!userAuth) return;
+    const collectionRef = firestore.collection(`users/${userAuth.uid}/cart`);
+
+    const batch = firestore.batch();
+    const newDocRef = collectionRef.doc(itemToRemove);
+
+    batch.delete(newDocRef);
+    return await batch.commit();
+}
+
+//FIRESTORE CART DELETION - DELETE ENTIRE CART
+export const cartClearDocument = async (userAuth) => {
+    if (!userAuth) return;
+    const collectionRef = firestore.collection(`users/${userAuth.uid}/cart`);
+    collectionRef
+        .get()
+        .then(cartItem => {
+            cartItem.forEach(cartCollection => {
+                cartCollection.ref.delete();
+            })
+        })
+}
+
+//FIRESTORE CART CONCAT STATE AND USER CART
+export const cartConcatWithFirebase = (userAuth, cartState, remoteCartState) => {
+    if (!userAuth) return;
+    // console.log(cartState);
+    // console.log(remoteCartState);
+
+    const newObj = cartState.map(cartLocal => {
+        const existingCartItem = remoteCartState.find(
+            remoteCart => remoteCart.id === cartLocal.id
+        );
+        if (existingCartItem)
+            return ({ ...cartLocal, quantity: cartLocal.quantity + existingCartItem.quantity });
+        else
+            return ({ ...cartLocal });
+    });
+    cartItemUpdateDocument(userAuth, newObj);
 }
 
 //Firebase Auth
