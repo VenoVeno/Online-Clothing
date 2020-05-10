@@ -116,14 +116,10 @@ export function* fetchCartAsync() {
         const snapShotBeforeUpdate = yield collectionRefUpdate.get();
 
         //Query from firestore before Update
-        if (!snapShotBeforeUpdate.empty) {
-            const cartItemsFirebaseBeforeUpdate = yield snapShotBeforeUpdate.docs.map(doc => doc.data());
-            //Get The State before Update
-            const cartItemsState = yield select(selectCartItems);
-            yield cartConcatWithFirebase(userAuth, cartItemsState, cartItemsFirebaseBeforeUpdate);
-        } else {
-            // yield console.log("No Cart data found To Update")
-        }
+        const cartItemsFirebaseBeforeUpdate = yield snapShotBeforeUpdate.docs.map(doc => doc.data());
+        //Get The State before Update
+        const cartItemsState = yield select(selectCartItems);
+        yield cartConcatWithFirebase(userAuth, cartItemsState, cartItemsFirebaseBeforeUpdate);
 
         //To Query from firestore and update State
         const collectionRef = yield firestore.collection(`users/${userAuth.uid}/cart`);

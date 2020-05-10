@@ -23,7 +23,7 @@ const StripeCheckoutButton = ({ price, paymentSuccess }) => {
                 alert('Payment Successful');
             })
             .catch(err => {
-                console.log('Payment Error: ', err);
+                // console.log('Payment Error: ', err);
                 alert('Payment Could not be processed! Please Use The Test Credit Card!')
             })
     }

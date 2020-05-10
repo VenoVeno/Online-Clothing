@@ -5,8 +5,7 @@ import { ImageContainer, TextContainer, ItemInfoContainer } from './order-item.s
 import { CheckOutItemContainer } from '../checkout-item/checkout-item.styles';
 
 const OrderItem = ({ order }) => {
-    const { cartItem, date, id, payment } = order;
-
+    const { cartItem, date } = order;
     return (
         <div className="order-item-container">
             <h3>Your Orders From {date} </h3>
@@ -27,9 +26,7 @@ const OrderItem = ({ order }) => {
                         </CheckOutItemContainer>
                     )
                 })
-
             }
-
         </div>
     )
 }
