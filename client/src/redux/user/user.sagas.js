@@ -3,13 +3,16 @@ import { UserActionTypes } from './user.types';
 
 import { googleProvider, auth, createUserProfileDocument, getCurrentUser } from '../../firebase/firebase.utils';
 
-import { signInSuccess, signInFailure, signUpSuccess, signUpFailure, signOutSuccess, signOutFailure } from './user.actions';
+import { signInSuccess, signInFailure, signUpSuccess, signUpFailure, signOutSuccess, signOutFailure, checkUserSessionFailure } from './user.actions';
 
 //AUTHETICATE USER
 export function* isUserAuthenticated() {
     try {
         const userAuth = yield getCurrentUser();
-        if (!userAuth) return;
+        if (!userAuth) {
+            yield put(checkUserSessionFailure("User Auth Failed"));
+            return;
+        }
         yield getSnapshotFromUserAuth(userAuth);
     } catch (error) {
         yield put(signInFailure(error));

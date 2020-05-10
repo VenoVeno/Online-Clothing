@@ -9,6 +9,11 @@ export const checkUserSession = () => ({
     type: UserActionTypes.CHECK_USER_SESSION
 });
 
+export const checkUserSessionFailure = (error) => ({
+    type: UserActionTypes.CHECK_USER_SESSION_FAILURE,
+    payload: error
+})
+
 //SIGNING IN
 export const googleSignInStart = () => ({
     type: UserActionTypes.GOOGLE_SIGN_IN_START

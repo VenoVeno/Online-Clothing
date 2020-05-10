@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 // import { createStructuredSelector } from 'reselect';
 // import { selectIsCollectionFetching, selectIsCollectionsLoaded } from '../../redux/shop/shop.selectors';

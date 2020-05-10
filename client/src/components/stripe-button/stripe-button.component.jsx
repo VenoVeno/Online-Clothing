@@ -19,7 +19,7 @@ const StripeCheckoutButton = ({ price, paymentSuccess }) => {
             }
         })
             .then(response => {
-                paymentSuccess();
+                paymentSuccess(response);
                 alert('Payment Successful');
             })
             .catch(err => {
@@ -47,7 +47,7 @@ const StripeCheckoutButton = ({ price, paymentSuccess }) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    paymentSuccess: () => dispatch(paymentSuccess())
+    paymentSuccess: (response) => dispatch(paymentSuccess(response))
 })
 
 export default connect(null, mapDispatchToProps)(StripeCheckoutButton);

@@ -8,6 +8,7 @@ const shrinkLabelStyles = css`
     font-size: 12px;
     color: ${mainColor};
 `
+
 export const GroupContainer = styled.div`
     position: relative;
     margin: 45px 0;

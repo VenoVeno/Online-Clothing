@@ -5,6 +5,10 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 
+// import dispatch from 'redux'
+// import { addItem } from '../redux/cart/cart.actions';
+// import { store } from '../redux/store';
+
 const config = {
     apiKey: "AIzaSyA6WIngM7nuOJed1sdpypvmNJw3TRMTkEg",
     authDomain: "apparel-shops.firebaseapp.com",
@@ -34,7 +38,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     if (!snapShot.exists) {
 
         const { displayName, email } = userAuth;
-        // console.log("Testing to Print UserAuth", userAuth);
+        // console.log("Testing to await    Print UserAuth", userAuth);
 
         const createdAt = new Date();
 
@@ -80,7 +84,7 @@ export const convertCollectionSnapshotToMaplimited = (snapshot) => {
         return {
             id: doc.id,
             title,
-            routeName: encodeURI(title.toLowerCase()),
+            routeName: encodeURI(title.toLowawaiterCase()),
             items
         }
     })
@@ -110,6 +114,7 @@ export const convertCollectionSnapshotToMap = (snapShot) => {
     }, {})
 }
 
+// PROMISE BASED USER AUTH FETCH
 export const getCurrentUser = () => {
     return new Promise((resolve, reject) => {
         const unsubscribe = auth.onAuthStateChanged(userAuth => {
@@ -118,10 +123,73 @@ export const getCurrentUser = () => {
         }, reject)
     })
 }
+
+//FIRESTORE HISTORY UPDATE ON PAYMENT SUCCESS
+export const cartHistoryUpdateDocument = async (userAuth, cartItem, additionalData) => {
+    if (!userAuth) return;
+
+    const { data } = additionalData;
+    // const { date } = headers;
+
+    const UserHistoryCollectionRef = firestore.collection(`users/${userAuth.uid}/UserHistory`);
+    const UserHistoryinfoDocRef = UserHistoryCollectionRef.doc();
+
+    const snapShot = await UserHistoryinfoDocRef.get();
+    if (!snapShot.exists) {
+        const paymentDate = new Date();
+        try {
+            await UserHistoryinfoDocRef.set({
+                paymentDate,
+            })
+            console.log("History Updation Success")
+        } catch (error) {
+            console.error('Error Creating History', error.message)
+        }
+    }
+
+    const batch = firestore.batch();
+
+    // FIRESTORE CART ITEM HISTORY UPDATE
+    const cartItemRef = UserHistoryinfoDocRef.collection("CartItem");
+    cartItem.forEach(obj => {
+        const { name } = obj;
+        const newCartDocRef = cartItemRef.doc(name);
+        batch.set(newCartDocRef, obj);
+    });
+
+    // FIRESTORE PAYMENT HISTORY UPDATE
+    const historyItemRef = UserHistoryinfoDocRef.collection("Payment-details");
+    const { success } = data;
+    const newSuccesArray = []
+    newSuccesArray.push(success);
+
+    newSuccesArray.forEach(obj => {
+        const { id, amount, ...otherdata } = obj;
+        // console.log(typeof amount, amount)
+        const amountFinal = amount / 100;
+        const newPaymentDocRef = historyItemRef.doc(id);
+        batch.set(newPaymentDocRef, { amountFinal, ...otherdata })
+    })
+
+    return await batch.commit();
+}
+
 //FIRESTORE CART ITEM UPDATION - ADD OR REMOVE
 export const cartItemUpdateDocument = async (userAuth, cartItem) => {
     if (!userAuth) return;
     const collectionRef = firestore.collection(`users/${userAuth.uid}/cart`);
+
+    // collectionRef.onSnapshot(function (snapShot) {
+    //     console.log(snapShot);
+    //     snapShot.docChanges().forEach((change) => {
+    //         let vari = change.doc.data();
+
+    //         const modifyArray = [];
+    //         modifyArray.push(vari);
+    //         console.log(modifyArray);
+    //         store.dispatch(addItem(modifyArray))
+    //     });
+    // });
 
     const batch = firestore.batch();
     cartItem.forEach(obj => {
@@ -158,21 +226,53 @@ export const cartClearDocument = async (userAuth) => {
 }
 
 //FIRESTORE CART CONCAT STATE AND USER CART
-export const cartConcatWithFirebase = (userAuth, cartState, remoteCartState) => {
+export const cartConcatWithFirebase = (userAuth, reducerCartState, firebaseCartState) => {
     if (!userAuth) return;
     // console.log(cartState);
     // console.log(remoteCartState);
 
-    const newObj = cartState.map(cartLocal => {
-        const existingCartItem = remoteCartState.find(
-            remoteCart => remoteCart.id === cartLocal.id
+    const newObj = reducerCartState.map(reducerCart => {
+        const existingCartItem = firebaseCartState.find(
+            firebaseCart => reducerCart.id === firebaseCart.id
         );
         if (existingCartItem)
-            return ({ ...cartLocal, quantity: cartLocal.quantity + existingCartItem.quantity });
+            return ({ ...reducerCart, quantity: reducerCart.quantity + existingCartItem.quantity });
         else
-            return ({ ...cartLocal });
+            return ({ ...reducerCart });
     });
     cartItemUpdateDocument(userAuth, newObj);
+}
+
+export const getCartState = (userAuth) => {
+    const collectionRef = firestore.collection(`users/${userAuth.uid}/cart`);
+
+    collectionRef.onSnapshot(function (snapShot) {
+        console.log(snapShot);
+        snapShot.docChanges().forEach((change) => {
+            let newObj = change.doc.data();
+
+            const modifyArray = [];
+            modifyArray.push(newObj);
+            console.log(modifyArray);
+            return modifyArray;
+        });
+    });
+}
+// FIRESTORE GET ORDER DETAILS
+export const getUserHistory = (UHCollectionSnapShot) => {
+
+    if (!UHCollectionSnapShot.empty) {
+        const paymentHistory = UHCollectionSnapShot.docs.map((doc) => {
+            const paymentDate = new Date((doc.data().paymentDate.seconds) * 1000)
+            return {
+                id: doc.id,
+                date: paymentDate
+            }
+        })
+        return paymentHistory;
+    } else {
+        console.log("No User History data found")
+    }
 }
 
 //Firebase Auth

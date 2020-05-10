@@ -1,7 +1,7 @@
 import { takeLatest, call, all, put } from 'redux-saga/effects';
 import { UserActionTypes } from '../user/user.types';
 
-import { clearCart, fetchCartStart, fetchCartSuccess, fetchCartFailure } from './cart.actions';
+import { clearCart, fetchCartStart, fetchCartSuccess, fetchCartFailure, cartHistoryUpdateSuccess } from './cart.actions';
 import { PaymentActionTypes } from '../payment/payment.types';
 
 //Cart Add,del,update
@@ -11,20 +11,52 @@ import { selectCartItems } from './cart.selectors';
 import { select } from 'redux-saga/effects';
 
 //Cart Fetch
-import { firestore, cartConcatWithFirebase } from '../../firebase/firebase.utils'
+import { firestore, cartConcatWithFirebase } from '../../firebase/firebase.utils';
 
-//CLEAR CART IN SIGN OUT AND ON PAYMENT SUCCESS
-export function* cartClearOnAction() {
+//Cart History Update
+import { cartHistoryUpdateDocument } from '../../firebase/firebase.utils';
+
+//CLEAR CART ON SIGN OUT AND ON PAYMENT SUCCESS
+export function* cartClearOnReducer() {
     yield put(clearCart())
 }
 
+//FIRESTORE CART DELETION - CLEAR CART
+export function* cartClearOnFirestore() {
+    try {
+        const userAuth = yield getCurrentUser();
+        if (!userAuth) return;
+
+        yield cartClearDocument(userAuth);
+    } catch (error) {
+        yield console.log(error);
+    }
+}
+
 export function* onSignOutSuccess() {
-    yield takeLatest(UserActionTypes.SIGN_OUT_SUCCESS, cartClearOnAction)
+    yield takeLatest(UserActionTypes.SIGN_OUT_SUCCESS, cartClearOnReducer)
+}
+
+export function* onCartHistoryUpdateSuccess() {
+    yield takeLatest(CartActionTypes.CART_HISTORY_UPDATE_SUCCESS, cartClearOnReducer)
+    yield takeLatest(CartActionTypes.CART_HISTORY_UPDATE_SUCCESS, cartClearOnFirestore)
+}
+
+//FIRESTORE CART HISTORY UPDATION - UPDATE
+export function* cartHistoryFirestore({ payload: { headers, data } }) {
+    try {
+        const userAuth = yield getCurrentUser();
+        if (!userAuth) return;
+        const cartItem = yield select(selectCartItems);
+        yield cartHistoryUpdateDocument(userAuth, cartItem, { headers, data });
+        yield put(cartHistoryUpdateSuccess());
+    } catch (error) {
+        yield console.log(error)
+    }
 }
 
 export function* onPaymentSuccess() {
-    yield takeLatest(PaymentActionTypes.PAYMENT_SUCCESS, cartClearOnAction)
-    yield takeLatest(PaymentActionTypes.PAYMENT_SUCCESS, cartClearOnFirestore)
+    yield takeLatest(PaymentActionTypes.PAYMENT_SUCCESS, cartHistoryFirestore)
 }
 
 //FIRESTORE CART ITEM UPDATION - ADD
@@ -56,7 +88,6 @@ export function* cartItemRemoveOnFirestore({ payload: { quantity, name }, type }
     }
 }
 
-
 //FIRESTORE CART ITEM UPDATION - DELETION
 export function* cartItemDeleteOnFirestore({ payload: { name } }) {
     try {
@@ -74,21 +105,10 @@ export function* onCartItemUpdate() {
     yield takeLatest(CartActionTypes.CLEAR_ITEM_FROM_CART, cartItemDeleteOnFirestore);
 }
 
-//FIRESTORE CART DELETION
-export function* cartClearOnFirestore() {
-    try {
-        const userAuth = yield getCurrentUser();
-        if (!userAuth) return;
-        yield cartClearDocument(userAuth);
-    } catch (error) {
-        yield console.log(error);
-    }
-}
-
 //CART FETCH FROM FIRESTORE
 export function* fetchCartAsync() {
-    yield put(fetchCartStart());
     try {
+        yield put(fetchCartStart());
         const userAuth = yield getCurrentUser();
         if (!userAuth) return;
 
@@ -97,34 +117,40 @@ export function* fetchCartAsync() {
 
         //Query from firestore before Update
         if (!snapShotBeforeUpdate.empty) {
-            const cartItemsRemoteBefore = yield snapShotBeforeUpdate.docs.map(doc => doc.data());
+            const cartItemsFirebaseBeforeUpdate = yield snapShotBeforeUpdate.docs.map(doc => doc.data());
             //Get The State before Update
             const cartItemsState = yield select(selectCartItems);
-            yield cartConcatWithFirebase(userAuth, cartItemsState, cartItemsRemoteBefore);
+            yield cartConcatWithFirebase(userAuth, cartItemsState, cartItemsFirebaseBeforeUpdate);
         } else {
-            yield console.log("No Cart data found")
+            // yield console.log("No Cart data found To Update")
         }
 
         //To Query from firestore and update State
         const collectionRef = yield firestore.collection(`users/${userAuth.uid}/cart`);
         const snapShot = yield collectionRef.get();
-        const cartItemsRemote = yield snapShot.docs.map(doc => doc.data());
 
-        yield put(fetchCartSuccess(cartItemsRemote));
+        if (!snapShot.empty) {
+            const cartItemsRemote = yield snapShot.docs.map(doc => doc.data());
+            yield put(fetchCartSuccess(cartItemsRemote));
+        } else {
+            // console.log("No Cart data found To Retrieve")
+            yield put(fetchCartFailure("No Cart data found To Retrieve"))
+        }
     } catch (error) {
         yield put(fetchCartFailure(error));
     }
 }
 
-export function* onfetchCartStart() {
+export function* onSignInSuccess() {
     yield takeLatest(UserActionTypes.SIGN_IN_SUCCESS, fetchCartAsync)
 }
 
 export default function* cartSagas() {
     yield all([
         call(onSignOutSuccess),
+        call(onCartHistoryUpdateSuccess),
         call(onPaymentSuccess),
         call(onCartItemUpdate),
-        call(onfetchCartStart)
+        call(onSignInSuccess)
     ])
 }

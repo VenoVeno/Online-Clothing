@@ -24,7 +24,7 @@ export const addItemToCart = (cartItems, cartItemToAdd) => {
 //     )
 // }
 
-export const removeItemsFromCart = (cartItems, cartItemToRemove) => {
+export const removeItemFromCart = (cartItems, cartItemToRemove) => {
     const existingCartItem = cartItems.find(
         cartItem => cartItem.id === cartItemToRemove.id
     );
@@ -38,5 +38,11 @@ export const removeItemsFromCart = (cartItems, cartItemToRemove) => {
         cartItem.id === cartItemToRemove.id
             ? { ...cartItem, quantity: cartItem.quantity - 1 }
             : cartItem
+    )
+}
+
+export const clearItemFromCart = (cartItems, cartItemToClear) => {
+    return cartItems.filter(
+        cartItem => cartItem.id !== cartItemToClear.id
     )
 }

@@ -45,6 +45,10 @@ export const CheckoutHeaderBlockContainer = styled.div`
             width: 12%;
         }
     }
+
+    @media screen and (max-width: 400px) {
+        width:auto;
+    }
 `;
 
 export const CheckoutTotalContainer = styled.div`

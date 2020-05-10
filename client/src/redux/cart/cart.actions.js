@@ -36,3 +36,7 @@ export const fetchCartFailure = (errorMessage) => ({
     type: CartActionTypes.FETCH_CART_FAILURE,
     payload: errorMessage
 });
+
+export const cartHistoryUpdateSuccess = () => ({
+    type: CartActionTypes.CART_HISTORY_UPDATE_SUCCESS
+})
